@@ -55,8 +55,14 @@ def buy_products():
 
     print("Available Products:")
     cursor.execute("SELECT name, price, quantity FROM products")
-    for row in cursor.fetchall():
-        print(row)
+    purchases = cursor.fetchall()
+    if not purchases:
+        print("No purchases found.")
+    else:
+        print(f"{'Product':<15}  {'Price':<15} {'Quantity':<10}")
+        print("-" * 50)
+        for row in purchases:
+            print(f"{str(row[0]):<15} {str(row[1]):<15} {str(row[2]):<10}")
 
     while trigger.lower() == "yes":
         
@@ -72,7 +78,7 @@ def buy_products():
             print("Product not found. Please select a valid product.")
             continue
         else:
-            select_quantity = input("How many product do you want to buy? ")
+            select_quantity = input("How many products do you want to buy? ")
 
         cursor.executemany("""
         INSERT INTO cart (user, name, quantity)
@@ -98,8 +104,12 @@ def cart_func():
 
     cursor.execute("SELECT name, quantity FROM cart WHERE user = %s", (user,))
     print("Your Cart:")
-    for row in cursor.fetchall():
-        print(row)
+    cart2 = cursor.fetchall()
+
+    print(f"{'Product':<15} {'Quantity':<10}")
+    print("-" * 30)
+    for row in cart2:
+        print(f"{str(row[0]):<15} {str(row[1]):<10}")
 
     buy = input("Do you want to proceed to buy the products in your cart? (yes/no) ").strip().lower()
     if buy == "yes":
@@ -124,16 +134,13 @@ def cart_func():
             cursor.execute("DELETE FROM cart WHERE user = %s", (user,))
             conn.commit()
 
-
 #-----------------------------------------------------------------------#
 # User Interaction
 
 trigger = "yes"
+
 user = input("Enter your username: ")
-
 buy_products()
-
-
 
 
 

@@ -1,3 +1,3 @@
 # Repository for DHSN Glauchau
-TI25-1
+Technische Informatik
 Glauchau, Saxony
